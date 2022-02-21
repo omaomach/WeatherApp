@@ -9,6 +9,18 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MainActivity extends AppCompatActivity {
 
     //class member variables
@@ -30,26 +42,42 @@ public class MainActivity extends AppCompatActivity {
 
         lv_weatherReports = findViewById(R.id.lv_weatherReport);
 
+        final WeatherDataService weatherDataService = new WeatherDataService(MainActivity.this); // making an instance of the WeatherDataService class so as to get to its methods
+
         //click listeners for each button
         btn_getCityId.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                //we create events to check when the button is clicked
-                Toast.makeText(MainActivity.this, "Hi, you need something?", Toast.LENGTH_SHORT).show();
+
+                //this doesn't work
+                weatherDataService.getCityId(et_dataInput.getText().toString(), new WeatherDataService.VolleyResponseListener() {
+                    @Override
+                    public void onError(String message) {
+                        Toast.makeText(MainActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onResponse(String cityId) {
+                        Toast.makeText(MainActivity.this, "Returned an ID of " + cityId, Toast.LENGTH_SHORT).show();
+
+                    }
+                });
             }
         });
 
         btn_getWeatherById.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Hi", Toast.LENGTH_SHORT).show();
+               weatherDataService.getCityForecastById("44418");
+
             }
         });
 
         btn_getWeatherByName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Hello", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "You typed " + et_dataInput.getText().toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
