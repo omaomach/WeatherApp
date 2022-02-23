@@ -70,7 +70,7 @@ public class WeatherDataService {
     public interface ForeCastByIdResponseListener {
         void onError(String message);
 
-        void onResponse(List<WeatherReportsModel> weatherReportsModels);
+        void onResponse(List<WeatherReportsModel> weatherReportsModel);
     }
 
     public void getCityForecastById (String cityId, ForeCastByIdResponseListener foreCastByIdResponseListener) {
@@ -88,7 +88,7 @@ public class WeatherDataService {
                     for (int i=0; i < consolidated_weather_list.length();i++) {
                         WeatherReportsModel one_day_weather = new WeatherReportsModel();
                         JSONObject first_day_from_api = (JSONObject) consolidated_weather_list.get(i);
-                        
+
                         one_day_weather.setId(first_day_from_api.getInt("id"));
                         one_day_weather.setWeather_state_name(first_day_from_api.getString("weather_state_name"));
                         one_day_weather.setWeather_state_abbr(first_day_from_api.getString("weather_state_abbr"));
@@ -128,9 +128,41 @@ public class WeatherDataService {
         MySingleton.getInstance(context).addToRequestQueue(request);
 
     }
+    public interface GetCityForecastByNameCallback {
+        void onError(String message);
+        void onResponse(List<WeatherReportsModel> weatherReportsModels);
+    }
 
-//    public list<WeatherReportsModel> getCityForecastByName (String cityName) {
-//
-//    }
+    public void getCityForecastByName (String cityName, GetCityForecastByNameCallback getCityForecastByNameCallback) {
+        //fetch the city id given the city name
+        getCityId(cityName, new VolleyResponseListener() {
+            @Override
+            public void onError(String message) {
+
+            }
+
+            @Override
+            public void onResponse(String cityId) {
+                //now we have the city id
+                getCityForecastById(cityId, new ForeCastByIdResponseListener() {
+                    @Override
+                    public void onError(String message) {
+
+                    }
+
+                    @Override
+                    public void onResponse(List<WeatherReportsModel> weatherReportsModel) {
+                        getCityForecastByNameCallback.onResponse(weatherReportsModel);
+                        //now we have the weather report
+
+                    }
+                });
+
+            }
+        });
+
+        //fetch the city forecast given the city id
+
+    }
 
 }
