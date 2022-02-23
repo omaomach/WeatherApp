@@ -36,25 +36,18 @@ public class WeatherReportsModel {
         this.predictability = predictability;
     }
 
+    public WeatherReportsModel() {
+
+    }
+
     @Override
     public String toString() {
-        return "WeatherReportsModel{" +
-                "id=" + id +
-                ", weather_state_name='" + weather_state_name + '\'' +
-                ", weather_state_abbr='" + weather_state_abbr + '\'' +
-                ", wind_direction_compass='" + wind_direction_compass + '\'' +
-                ", created='" + created + '\'' +
-                ", applicable_date='" + applicable_date + '\'' +
-                ", min_temp=" + min_temp +
-                ", max_temp=" + max_temp +
-                ", the_temp=" + the_temp +
-                ", wind_speed=" + wind_speed +
-                ", wind_direction=" + wind_direction +
-                ", air_pressure=" + air_pressure +
-                ", humidity=" + humidity +
-                ", visibility=" + visibility +
-                ", predictability=" + predictability +
-                '}';
+        return
+                "Date: " + applicable_date + '\'' + weather_state_name +
+                ": Lowest Temp : " + min_temp +
+                " Highest Temp: " + max_temp +
+                " Temp: " + the_temp +
+                " Visibility: " + visibility;
     }
 
     public int getId() {
